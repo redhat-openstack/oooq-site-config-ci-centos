@@ -25,9 +25,6 @@ else
     exit 1
 fi
 
-ls -la config/release/
-cat config/release/new.yml
-
 # (trown) This is so that we ensure separate ssh sockets for
 # concurrent jobs. Without this, two jobs running in parallel
 # would try to use the same undercloud-stack socket.
@@ -37,14 +34,14 @@ export ANSIBLE_SSH_CONTROL_PATH=$socketdir/%%h-%%r
 bash $WORKSPACE/tripleo-quickstart/quickstart.sh \
   --tags all \
   --config $WORKSPACE/config/general_config/$CONFIG.yml \
-  --working-dir $WORKSPACE   \
+  --working-dir $WORKSPACE/ \
   --playbook $PLAYBOOK \
   --extra-vars undercloud_image_url="file:///var/lib/oooq-images/undercloud.qcow2" \
   --extra-vars artib_release=$RELEASE \
   --extra-vars artib_build_system=$BUILD_SYS \
   --extra-vars artib_delorean_hash=$delorean_current_hash \
   --extra-vars publish=$PUBLISH \
+  --extra-vars artib_image_stage_location="${LOCATION:-'testing'}" \
   --no-clone \
-  --bootstrap \
   --release $RELEASE \
   $VIRTHOST
